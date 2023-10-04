@@ -1,0 +1,271 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <style type = text/css>
+        *{
+            margin: 0;
+            padding: 0;
+            }
+
+        body{
+            overflow: hidden;
+            }
+
+        #bg{
+            background-image: url("{% static 'RatingPrediction\images\bg.png'%}");
+            width: 150vw;
+            height:100vh;
+            position: absolute;
+            z-index: -1;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-size: 150vw 100vh;
+            animation-name: move;
+            animation-duration: 10s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            opacity: 0.6;
+        }
+
+        @keyframes move {
+            from {transform: translateX(0);}
+            to {transform: translateX(-25%);}
+        }
+
+        main{
+            padding: 0 3em 0 3em ;
+            height:100vh;
+            width: 100vw;
+            display: grid;
+            align-items: center;
+            justify-content: center;
+            grid-template-columns: 40vw 60vw;
+        }
+
+        .main{
+            display: grid;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0, 0.7);
+            height: 50vh;
+            width: 35vw;
+            border-radius: 4px;
+        }
+
+        table, th, td {
+          border: 2px solid white;
+          border-radius: 3px;
+          color: black;
+          font-weight:bold;
+          color:white;
+        }
+
+        table {
+          border-spacing: 0.3em;
+          align-self: self-end;
+          width: fit-content;
+          margin-left: 9vw;
+        }
+
+        th, td{
+            padding: 0.5em;
+        }
+
+        #btn{
+            display: flex;
+            position:relative;
+            width: 40vw;
+            height: 20vh;
+            border-radius: 10px;
+            align-items: center;
+            justify-content: center;
+            align-self: normal;
+            margin: 0 auto;
+        }
+
+        form{
+           padding: 1vw;
+        }
+
+        input[type=submit] {
+            height: 5vh;
+            width: 10vw;
+        }
+
+        .graph{
+            background: rgba(0,0,0, 0.7);
+            width: 50vw;
+            height: 54vh;
+            border-radius: 4px;
+            display: grid;
+            grid-template-rows: 5vh 10vh auto;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .graph h2{
+            align-self: center;
+            grid-row-start: 1;
+            grid-row-end: 2;
+            display: flex;
+            justify-content: center;
+            font-family: Helvetica, sans-serif;
+            color: white;
+        }
+
+        .graph #grb{
+            align-self: center;
+            grid-row-start: 2;
+            grid-row-end: 3;
+            display: flex;
+            justify-content: center;
+        }
+
+        .graph #gh{
+            align-self: center;
+            grid-row-start: 3;
+            grid-row-end: 4;
+            display: flex;
+            justify-content: center;
+        }
+
+        .graph #grb button{
+            height: 5vh;
+            width: 6vw;
+            margin: 0.3em;
+        }
+        #gh img{
+            display: none;
+            }
+    </style>
+</head>
+
+<body>
+<div id="bg"></div>
+    <main>
+        <div class = 'main'>
+            <table>
+              <tr>
+                <th>Algorithm</th>
+                <th>Accuracy</th>
+              </tr>
+              <tr>
+                <td>Linear Regression</td>
+                <td>51.20480924920018%</td>
+              </tr>
+              <tr>
+                <td>Decision Tree Regressor</td>
+                <td>91.71525375176259%</td>
+              </tr>
+              <tr>
+                <td>KNeighbors Regressor</td>
+                <td>19.572718099053866%</td>
+              </tr>
+              <tr>
+                <td>Random Forest Regressor</td>
+                <td>90.83714860523526%</td>
+              </tr>
+            </table>
+            <div id = 'btn'>
+            <form action="train" >
+                <input type="submit" value = "View Train Dataset" class="a">
+            </form>
+            <form action="test" >
+                <input type="submit" value = "View Test Dataset" class = "a">
+            </form>
+            </div>
+        </div>
+
+        <div class="graph">
+            <h2>Show Ghaphs</h2>
+            <div id="grb">
+                <button type="button" onclick="showm()" id="btnID">Meta Score VS Rating</button>
+                <button type="button" onclick="showr()" id="btnID">Runtime VS Rating</button>
+                <button type="button" onclick="showv()" id="btnID">Votes VS Rating</button>
+                <button type="button" onclick="showg()" id="btnID">Gross VS Rating</button>
+                <button type="button" onclick="showge()" id="btnID">Genre VS Rating</button>
+                <button type="button" onclick="showc()" id="btnID">Certificate VS Rating</button>
+            </div>
+            <div id="gh">
+                <img src="{% static 'RatingPrediction\images\cert(1).jpg'%}" id="c"/>
+                <img src="{% static 'RatingPrediction\images\gross.jpg'%}" id="g"/>
+                <img src="{% static 'RatingPrediction\images\meta.jpg'%}" id="m"/>
+                <img src="{% static 'RatingPrediction\images\run.jpg'%}" id="r"/>
+                <img src="{% static 'RatingPrediction\images\votes.jpg'%}" id="v"/>
+                <img src="{% static 'RatingPrediction\images\genre.jpg'%}" id="ge"/>
+            </div>
+            </div>
+        </div>
+    </main>
+
+
+<script>
+        function showm() {
+            document.getElementById('m')
+                    .style.display = "block";
+
+            document.getElementById('g').style.display = "none";
+            document.getElementById('ge').style.display = "none";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('r').style.display = "none";
+            document.getElementById('v').style.display = "none";
+        }
+        function showv() {
+            document.getElementById('v')
+                    .style.display = "block";
+
+            document.getElementById('g').style.display = "none";
+            document.getElementById('ge').style.display = "none";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('r').style.display = "none";
+            document.getElementById('m').style.display = "none";
+        }
+        function showc() {
+            document.getElementById('c')
+                    .style.display = "block";
+
+            document.getElementById('g').style.display = "none";
+            document.getElementById('ge').style.display = "none";
+            document.getElementById('m').style.display = "none";
+            document.getElementById('r').style.display = "none";
+            document.getElementById('v').style.display = "none";
+        }
+        function showr() {
+            document.getElementById('r')
+                    .style.display = "block";
+
+            document.getElementById('g').style.display = "none";
+            document.getElementById('ge').style.display = "none";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('m').style.display = "none";
+            document.getElementById('v').style.display = "none";
+        }
+        function showge() {
+            document.getElementById('ge')
+                    .style.display = "block";
+
+            document.getElementById('g').style.display = "none";
+            document.getElementById('m').style.display = "none";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('m').style.display = "none";
+            document.getElementById('v').style.display = "none";
+        }
+        function showg() {
+            document.getElementById('g')
+                    .style.display = "block";
+
+            document.getElementById('m').style.display = "none";
+            document.getElementById('ge').style.display = "none";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('m').style.display = "none";
+            document.getElementById('v').style.display = "none";
+        }
+    </script>
+</body>
+</html>

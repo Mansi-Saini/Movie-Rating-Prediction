@@ -1,0 +1,361 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict</title>
+
+    <style type = text/css>
+        *{
+            margin: 0;
+            padding: 0;
+            }
+
+            body {
+              overflow: hidden;
+              width: 100vw;
+              height: 100vh;
+              display: grid;
+              align-content: center;
+              justify-content:  space-around;
+              grid-column-template: 40vw 60vw;
+            }
+
+        #bg{
+            background-image: url("{% static 'RatingPrediction\images\bg.png'%}");
+            width: 150vw;
+            height:100vh;
+            position: absolute;
+            z-index: -1;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-size: 150vw 100vh;
+            animation-name: move;
+            animation-duration: 10s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            opacity: 0.6;
+        }
+
+        @keyframes move {
+            from {transform: translateX(0);}
+            to {transform: translateX(-25%);}
+        }
+
+        main {
+              display: grid;
+              background-color: rgba(0,0,0, 0.7);
+              width: 45vw;
+              height: 60vh;
+              border-radius: 4px;
+              align-content: center;
+              justify-content: center;
+              grid-column-start:1;
+              grid-column-end:2;
+              align-self: center;
+              font-size: 1.3em;
+            }
+
+        form{
+            display: grid;
+            align-content: center;
+            justify-content: center;
+        }
+
+        form input[type=submit] {
+            width: 5vw;
+            font-size: 1em;
+            margin: 0 0 9px 0;
+        }
+        table{
+            border-spacing: 0.7em;
+            color: white;
+        }
+
+        #btn  {
+            align-self: center;
+            justify-self: center;
+        }
+
+        form #label{
+             display:flex;
+        }
+
+        form table td input{
+            height: 3vh;
+            font-size: 1em;
+            width: 9vw;
+        }
+        form #label label{
+             height: 9vh;
+             width: 9vw;
+             white-space: normal;
+             color: white;
+        }
+
+        #res  {
+            align-self: center;
+            justify-self: center;
+            color: white;
+            display: grid;
+            grid-template-rows: auto;
+            grid-template-columns: 5em 5em 7em 7em 5em;
+            width: 45vw;
+        }
+
+        main #note{
+            color: yellow;
+            margin-top:10px;
+        }
+        #guide{
+            grid-column-start:2;
+            grid-column-end:3;
+            display:grid;
+            grid-column-template:auto auto;
+            grid-row-template:auto;
+            background-color: rgba(0,0,0, 0.7);
+            color: white;
+            align-content: center;
+            width: 30vw;
+            height: 85vh;
+            border-radius:4px;
+            justify-content: space-around;
+        }
+
+        #guide #certi{
+            grid-column-start:2;
+            grid-column-end:3;
+            grid-row-start: 1;
+            grid-row-end:2;
+        }
+
+        #guide #genre{
+            grid-column-start:1;
+            grid-column-end:2;
+            grid-row-start: 1;
+            grid-row-end:2;
+        }
+
+        #guide .gt{
+          border-spacing: 0.3em;
+          border: 2px solid white;
+          border-radius: 3px;
+        }
+
+        #guide td,th{
+            border-spacing: 0.3em;
+          border: 2px solid white;
+          border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div id="bg"></div>
+
+    <main>
+        <form action="result">
+            <table>
+                <tr>
+                    <td class="col">Meta Score:</td>
+                    <td class="value"><input type="text" name="meta" value={{result2.m}}></td>
+                </tr>
+                <tr>
+                    <td class="col">No of Votes:</td>
+                    <td class="value"><input type="text" name="vote" value={{result2.v}}></td>
+                </tr>
+                <tr>
+                    <td class="col">Gross:</td>
+                    <td class="value"><input type="text" name="gross" value={{result2.g}}></td>
+                </tr>
+                <tr>
+                    <td class="col">Runtime:</td>
+                    <td class="value"><input type="text" name="run" value={{result2.r}}></td>
+                </tr>
+                <tr>
+                    <td class="col">Certificate:</td>
+                    <td class="value"><input type="text" name="cert" value={{result2.c}}></td>
+                </tr>
+                <tr>
+                    <td class="col">Genre:</td>
+                    <td class="value"><input type="text" name="genre" value={{result2.ge}}></td>
+                </tr>
+            </table>
+
+            <div id="btn">
+                <input type="submit" value="Predict">
+                </div>
+
+            <div id="label">
+                <label>Linear Regression</label>
+                <label>Decision Tree Regressor</label>
+                <label>KNeighbors Regressor</label>
+                <label>Random Forest Regressor</label>
+            </div>
+            </form>
+        <div id="res">
+            <div>Result :</div>
+                <div id="lr">{{result2.resultl}}</div>
+                <div id="dt">{{result2.resultd}}</div>
+                <div id="kn">{{result2.resultk}}</div>
+                <div id="rf">{{result2.resultrf}}</div>
+        </div>
+
+        <div id="note">*Note: For our test dataset Decision Tree Regressor gives the best accuracy</div>
+    </main>
+<div id="guide">
+    <div id="certi">
+        <h3>Values for Certificate</h3>
+        <table class ="gt">
+              <tr>
+                <th>Certificate</th>
+                <th>Value</th>
+              </tr>
+              <tr>
+                <td>A</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>UA</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>U</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>R</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td>G</td>
+                <td>5</td>
+              </tr>
+            <tr>
+                <td>PG-13</td>
+                <td>6</td>
+              </tr>
+            <tr>
+                <td>PG</td>
+                <td>7</td>
+              </tr>
+            <tr>
+                <td>Passed</td>
+                <td>8</td>
+              </tr>
+            <tr>
+                <td>Approved</td>
+                <td>9</td>
+              </tr>
+            <tr>
+                <td>TV-PG</td>
+                <td>10</td>
+              </tr>
+            <tr>
+                <td>U/A</td>
+                <td>11</td>
+              </tr>
+            <tr>
+                <td>GP</td>
+                <td>12</td>
+              </tr>
+            </table>
+    </div>
+
+    <div id="genre">
+        <h3>Values for Genre</h3>
+        <table class="gt">
+              <tr>
+                <th>Genre</th>
+                <th>Value</th>
+              </tr>
+              <tr>
+                <td>Drama</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>Crime</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>Action</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>Adventure</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td>Biography</td>
+                <td>5</td>
+              </tr>
+            <tr>
+                <td>History</td>
+                <td>6</td>
+              </tr>
+            <tr>
+                <td>Sci-Fi</td>
+                <td>7</td>
+              </tr>
+            <tr>
+                <td>Romance</td>
+                <td>8</td>
+              </tr>
+            <tr>
+                <td>Western</td>
+                <td>9</td>
+              </tr>
+            <tr>
+                <td>Fantasy</td>
+                <td>10</td>
+              </tr>
+            <tr>
+                <td>Comedy</td>
+                <td>11</td>
+              </tr>
+            <tr>
+                <td>Thriller</td>
+                <td>12</td>
+              </tr>
+            <tr>
+                <td>Animation</td>
+                <td>13</td>
+              </tr>
+            <tr>
+                <td>Family</td>
+                <td>14</td>
+              </tr>
+            <tr>
+                <td>War</td>
+                <td>15</td>
+              </tr><tr>
+                <td>Mystery</td>
+                <td>16</td>
+              </tr>
+            <tr>
+                <td>Music</td>
+                <td>17</td>
+              </tr>
+            <tr>
+                <td>Horror</td>
+                <td>18</td>
+              </tr>
+            <tr>
+                <td>Sport</td>
+                <td>19</td>
+              </tr>
+            <tr>
+                <td>Musical</td>
+                <td>20</td>
+              </tr>
+            <tr>
+                <td>Film-Noir</td>
+                <td>21</td>
+              </tr>
+            </table>
+    </div>
+</div>
+</body>
+</html>
